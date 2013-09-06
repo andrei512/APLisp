@@ -12,7 +12,6 @@ Pod::Spec.new do |s|
                    DESC
 
   s.homepage     = "http://aplisp.com"
-  # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
 
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "Andrei Puni" => "puni.andrei23@gmail.com" }
