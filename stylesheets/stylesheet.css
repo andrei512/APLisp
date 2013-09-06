@@ -1,247 +1,187 @@
-body {
-  margin: 0;
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  box-sizing:         border-box;
+
   padding: 0;
-  background: #151515 url("../images/bkg.png") 0 0;
-  color: #eaeaea;
-  font: 16px;
-  line-height: 1.5;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  margin:  0;
 }
 
-/* General & 'Reset' Stuff */
+body {
+  background: #33AB90;
+  color:      #33AB90;
 
-.container {
-  width: 90%;
-  max-width: 600px;
-  margin: 0 auto;
+  font-family: "ff-meta-web-pro", sans-serif;
+
+  font-size:   1.2rem;
+  line-height: 2rem;
+
+  margin:  0;
+  padding: 0;
 }
 
-section {
+header, section, footer {
+  padding: 2rem;
+}
+
+header .inner, section .inner, footer .inner {
+  max-width: 700px;
+  margin: auto;
+}
+
+.nsarray {
+  background: #AB3333;
+  color:      #AB3333;
+}
+
+.nsdictionary {
+  background: #3390AB;
+  color:      #3390AB;
+}
+
+.helpers {
+  background: #E8930C;
+  color:      #E8930C;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "brandon-grotesque";
+  color: rgba(255, 255, 255, 0.8);
+}
+
+h1 {
+  font-size:   70px;
+  line-height: 6rem;
+}
+
+h2 {
+  font-size:   30px;
+  line-height: 3rem;
+}
+
+h3 {
+  font-size:   2rem;
+  line-height: 2rem;
+
+  margin: 2rem 0 1rem 0;
+}
+
+h4 {
+  font-size:   20px;
+  line-height: 2rem;
+
+  margin: 2rem 0 1rem 0;
+}
+
+h4 + h4 {
+  margin-top: -1rem;
+}
+
+h4 code {
   display: block;
-  margin: 0 0 20px 0;
+
+  font-family: Menlo, "droid-sans-mono", monospace;
+  font-size:   0.9rem !important;
+  line-height: 1rem;
+  color: rgba(0, 0, 0, 0.5);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 20px;
+nav {
+  margin-bottom: 1rem;
 }
 
-li {
-  line-height: 1.4 ;
+p {
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-/* Header, <header>
-   header   - container
-   h1       - project name
-   h2       - project description
-*/
-
-header {
-  background: rgba(0, 0, 0, 0.1);
-  width: 100%;
-  border-bottom: 1px dashed #b5e853;
-  padding: 20px 0;
-  margin: 0 0 40px 0;
+p + p {
+  margin-top: -0.5rem;
 }
 
-header h1 {
-  font-size: 30px;
-  line-height: 1.5;
-  margin: 0 0 0 -40px;
-  font-weight: bold;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  color: #b5e853;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1),
-               0 0 5px rgba(181, 232, 83, 0.1),
-               0 0 10px rgba(181, 232, 83, 0.1);
-  letter-spacing: -1px;
-  -webkit-font-smoothing: antialiased;
+a {
+  color: rgba(255, 255, 255, 0.9);
 }
 
-header h1:before {
-  content: "./ ";
-  font-size: 24px;
+a:hover {
+  color: white;
 }
 
-header h2 {
-  font-size: 18px;
-  font-weight: 300;
-  color: #666;
+pre, h2, h3, h4, h5 {
+  margin-bottom: 1rem;
 }
 
-#downloads .btn {
-  display: inline-block;
-  text-align: center;
-  margin: 0;
+pre, tt, code, kbd, samp {
+  font-family: Menlo, "droid-sans-mono", monospace;
+  font-size:   0.95rem;
 }
 
-/* Main Content
-*/
+pre, p code {
+  border-radius: 0.2rem;
 
-#main_content {
-  width: 100%;
-  -webkit-font-smoothing: antialiased;
-}
-section img {
-  max-width: 100%
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: normal;
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  color: #b5e853;
-  letter-spacing: -0.03em;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1),
-               0 0 5px rgba(181, 232, 83, 0.1),
-               0 0 10px rgba(181, 232, 83, 0.1);
-}
-
-#main_content h1 {
-  font-size: 30px;
-}
-
-#main_content h2 {
-  font-size: 24px;
-}
-
-#main_content h3 {
-  font-size: 18px;
-}
-
-#main_content h4 {
-  font-size: 14px;
-}
-
-#main_content h5 {
-  font-size: 12px;
-  text-transform: uppercase;
-  margin: 0 0 5px 0;
-}
-
-#main_content h6 {
-  font-size: 12px;
-  text-transform: uppercase;
-  color: #999;
-  margin: 0 0 5px 0;
-}
-
-dt {
-  font-style: italic;
-  font-weight: bold;
-}
-
-ul li {
-  list-style: none;
-}
-
-ul li:before {
-  content: ">>";
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  font-size: 13px;
-  color: #b5e853;
-  margin-left: -37px;
-  margin-right: 21px;
-  line-height: 16px;
-}
-
-blockquote {
-  color: #aaa;
-  padding-left: 10px;
-  border-left: 1px dotted #666;
+p code {
+  background-color: rgba(255, 255, 255, 0.66);
 }
 
 pre {
-  background: rgba(0, 0, 0, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 10px;
-  font-size: 14px;
-  color: #b5e853;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  text-wrap: normal;
+  padding: 0.5rem;
   overflow: auto;
-  overflow-y: hidden;
+  color: black;
+
+  margin-left:  -0.5rem;
+  margin-right: -0.5rem;
 }
 
-table {
-  width: 100%;
-  margin: 0 0 20px 0;
+p code {
+  padding: 0.2rem 0.3rem;
+  color: black;
 }
 
-th {
-  text-align: left;
-  border-bottom: 1px dashed #b5e853;
-  padding: 5px 10px;
-}
-
-td {
-  padding: 5px 10px;
-}
-
-hr {
-  height: 0;
-  border: 0;
-  border-bottom: 1px dashed #b5e853;
-  color: #b5e853;
-}
-
-/* Buttons
-*/
-
-.btn {
+.button {
   display: inline-block;
-  background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.3), rgba(35, 35, 35, 0.3) 50%, rgba(10, 10, 10, 0.3) 50%, rgba(0, 0, 0, 0.3));
-  padding: 8px 18px;
-  border-radius: 50px;
-  border: 2px solid rgba(0, 0, 0, 0.7);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.7);
-  border-top: 2px solid rgba(0, 0, 0, 1);
-  color: rgba(255, 255, 255, 0.8);
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: 13px;
+
+  padding: 1rem 1.5rem;
+  margin: 0 1rem 1rem 0;
+  border-radius: 0.25rem;
+
+  color: inherit;
+  background: rgba(0, 0, 0, 0.4);
+
   text-decoration: none;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.75);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  box-shadow: 0 1px rgba(0, 0, 0, 0.2);
 }
 
-.btn:hover {
-  background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.6), rgba(35, 35, 35, 0.6) 50%, rgba(10, 10, 10, 0.8) 50%, rgba(0, 0, 0, 0.8));
+.button:hover {
+  background: rgba(0, 0, 0, 0.5);
+
+  color: inherit;
 }
 
-.btn .icon {
+.button:active {
+  position: relative;
+  top: 1px;
+  box-shadow: none;
+}
+
+p + nav.methods {
+  margin-top: -1rem;
+}
+
+nav.methods li {
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin: 1px 8px 0 0;
-  float: left;
 }
 
-.btn-github .icon {
-  opacity: 0.6;
-  background: url("../images/blacktocat.png") 0 0 no-repeat;
+nav.methods li:after {
+  content: ",";
+  margin-right: 0.2rem;
+  color: rgba(255, 255, 255, 0.75);
 }
 
-/* Links
-   a, a:hover, a:visited
-*/
-
-a {
-  color: #63c0f5;
-  text-shadow: 0 0 5px rgba(104, 182, 255, 0.5);
-}
-
-/* Clearfix */
-
-.cf:before, .cf:after {
-  content:"";
-  display:table;
-}
-
-.cf:after {
-  clear:both;
-}
-
-.cf {
-  zoom:1;
+nav.methods li:last-child:after {
+  content: ""
 }
