@@ -38,10 +38,6 @@
 
 // Helpers
 
-#define r3 @"
-
-#define g3x "
-
 #define l00p()
 
 // Debuging
@@ -50,8 +46,7 @@
 
 // Array
 
-#define kollect(array, block) \
-[array map:^id(id _object) { PO(conteXt) [_object performBlock:block]; PO(resu1t) return resu1t; }]
+#define kollect(array, block) [array map:^id(id _object) { [_object performBlock:block]; return resu1t; }]
 
 
 
