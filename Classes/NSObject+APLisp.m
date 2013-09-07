@@ -15,7 +15,7 @@ void addFunctionToContext(Block function, NSString *name, NSMutableDictionary *c
 
 Block function(NSString *name, Block block) {
     return ^{
-        nam3 = name;
+        block_name = name;
         
         block();
     };
@@ -56,30 +56,44 @@ BOOL isBlock(id object) {
 }
 
 NSObject * _do(NSArray *args) {
-    if (args.count > 0) {
-        // runt the block and use the rest as params
-        if (isBlock(args[0]) == YES) {
-            Block _action = args[0];
-            
-            NSRange range = {1, args.count - 1};
-            NSArray *_params = [args subarrayWithRange:range];
-
-            [[NSObject root] performBlockWithParams:_params
-                                              block:_action];
-            
-            return resu1t;
-        } else {
-            return nsnull;
-        }
+    // if the first arg is a block then implicitly set this to root
+    if (args.count < 1 ||
+        isBlock(args[0]) == YES) {
+        return _do([@[Root] arrayByAddingObjectsFromArray:args]);
     } else {
-        return nsnull;
+        NSObject *_this = args[0];
+        
+        Block _action = Nothing;
+        if (args.count >= 2 &&
+            isBlock(args[1]) == YES) {
+            _action = args[1];
+        }
+        
+        NSArray *_params = @[];
+        
+        if (args.count > 2) {
+            NSRange range = {2, args.count - 2};
+            _params = [args subarrayWithRange:range];
+        }
+
+        [_this performBlockWithParams:_params
+                                block:_action];
+        
+        return resu1t;
     }
 }
 
 NSObject * _yield(NSArray *args) {
-    return _do([@[callback] arrayByAddingObjectsFromArray:args]);
+    return _do([@[Root, callback] arrayByAddingObjectsFromArray:args]);
 }
 
+Block _Nothing() {
+    static Block _nothing = nil;
+    if (_nothing == nil) {
+        _nothing = function(@"Nothing", ^{});
+    }
+    return _nothing;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -98,7 +112,11 @@ NSObject * _yield(NSArray *args) {
     NSThread *thread = [NSThread currentThread];
     NSMutableDictionary *dict = [thread threadDictionary];
     if (dict[@"thisStack"] == nil) {
+        // create the root context
         NSMutableDictionary *rootContextForThread = [NSMutableDictionary dictionary];
+        rootContextForThread[@"name"] = @"Global Context";
+        rootContextForThread[@"thread"] = thread;
+        
         dict[@"thisStack"] = [NSMutableArray arrayWithObject:rootContextForThread];
     }
     return dict[@"thisStack"];
@@ -108,8 +126,14 @@ NSObject * _yield(NSArray *args) {
     return [[NSObject stackForCurrentThread] lastObject];
 }
 
+- (NSMutableDictionary *)createContext {
+    NSMutableDictionary *context = [NSMutableDictionary dictionary];
+//    context[@"globalContext"] = @"";
+    return context;
+}
+
 - (void)pushContext {
-    [[NSObject stackForCurrentThread] addObject:[NSMutableDictionary dictionary]];
+    [[NSObject stackForCurrentThread] addObject:[self createContext]];
 }
 
 - (void)pushContext:(NSMutableDictionary *)context {
@@ -157,25 +181,27 @@ NSObject * _yield(NSArray *args) {
     @try {
         if (block != nil) {
             [self pushContext:context];
-            
-            params = _params ?: @[];
-            param = (_params != nil && _params.count > 0) ? _params[0] : nsnull;
-            
-            if (self == [NSObject root]) {
-                this = params;
-            } else {
-                this = self;
-            }
 
+            this = self;
+            
+            // Extract the callback from params
             if (_params.count > 0 &&
                 isBlock([_params lastObject]) == YES) {
                 callback = [_params lastObject];
+                
                 NSRange range = {0, _params.count - 1};
-                params = [_params subarrayWithRange:range];
+                _Params = [_params subarrayWithRange:range];
             } else {
-                callback = ^{};
+                callback = Nothing;
             }
+
+            // params is @[this] implicitly
+            // param is this implicitly
             
+            _Params = _params ?: @[this];
+            param = (_params != nil && _params.count > 0) ? _params[0] : nsnull;
+            
+            // implicitly return this
             [NSObject _ret:this];
             
             block();
@@ -187,7 +213,7 @@ NSObject * _yield(NSArray *args) {
     @catch (NSException *exception) {
         [[NSException exceptionWithName:@"Throw stack"
                                 reason:@"block chrashed"
-                              userInfo:@{}] raise];
+                               userInfo:@{@"exception" : exception}] raise];
     }
 }
 
@@ -195,7 +221,13 @@ NSObject * _yield(NSArray *args) {
 
 - (VaradicBlock)_do {
     return ^(NSArray *args) {
-        return _do(args);
+        return _do([@[self] arrayByAddingObjectsFromArray:args]);
+    };
+}
+
+- (VaradicBlock)_yield {
+    return ^(NSArray *args) {
+        return _do([@[self, callback] arrayByAddingObjectsFromArray:args]);
     };
 }
 
@@ -235,27 +267,6 @@ NSObject * _yield(NSArray *args) {
 
 @end
 
-
-
-@implementation NSArray (APLisp)
-
-//- (VaradicBlock)_do {
-//    __block NSArray *weakSelfAsArray = (NSArray *)self;
-//    return ^(NSArray *args) {
-//        return _do([args arrayByAddingObjectsFromArray:weakSelfAsArray]);
-//    };
-//}
-
-@end
-
-
-@implementation NSDictionary (APLisp)
-
-- (VaradicBlock)_do {
-    return [super _do];
-}
-
-@end
 
 
 

@@ -23,8 +23,11 @@ typedef NSObject *(^VaradicBlock)(NSArray *);
 
 #define conteXt [NSObject _context]
 
+#define Root [NSObject root]
+
 #define this conteXt[@"this"]
-#define params conteXt[@"params"]
+#define params ((NSArray *)conteXt[@"params"]) // this is not assignable
+#define _Params conteXt[@"params"]
 #define param conteXt[@"param"]
 
 #define resu1t conteXt[@"lastResult"]
@@ -32,6 +35,9 @@ typedef NSObject *(^VaradicBlock)(NSArray *);
 #define callback conteXt[@"callback"]
 
 #define ret(a_result) [NSObject _ret:a_result]; return;
+
+// !!!!!!!!!!!!!!! first object is this
+// DO(this, action, params, callback) -> result
 
 #define do(...) _do(@[ __VA_ARGS__ ])
 #define yield(...) _yield(@[ __VA_ARGS__ ])
@@ -45,16 +51,26 @@ extern Block function(NSString *name, Block block);
 extern NSString * prettyClass(Class class);
 extern NSObject * _do(NSArray *args);
 extern NSObject * _yield(NSArray *args);
+extern BOOL isBlock(id object);
+extern Block _Nothing();
 
 // Constants
+
+#define Nothing _Nothing();
 
 #define nsnull [NSNull null]
 
 // Helpers
 
+// Strong Types
 #define as(Class) asWithName(Class, object)
 #define asWithName(Class, name) Class *name = (Class *)param;
 
+#define argAs(index, Class) ((Class *)(params[index]))
+#define namedArgAs(name, index, Class) Class *name = ((Class *)(params[index]));
+
+
+// Common
 #define asIndex int i = ((NSNumber *)param).intValue;
 
 #define asString asWithName(NSString, string)
@@ -64,11 +80,10 @@ extern NSObject * _yield(NSArray *args);
 #define asView asWithName(UIView, view)
 #define asViewController asWithName(UIViewController, viewController)
 
-#define l00p()
 
 // Debuging
 
-#define nam3 conteXt[@"name"]
+#define block_name conteXt[@"name"]
 
 // Array
 
