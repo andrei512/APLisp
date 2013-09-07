@@ -8,7 +8,7 @@
 
 #import "NSObject+APAutoBlocking.h"
 #import "NSObject+LSDirectCodeManipulation.h"
-
+#import <NSArray+APUtils.h>
 
 @implementation NSObject (APAutoBlocking)
 
@@ -20,7 +20,7 @@
                          @"key" : key,
                          @"value" :
                              [self performSelector:NSSelectorFromString(key)]
-                             ?: nsnull
+                         ?: [NSNull null]
                 };
             }]
                                            forKeys:self.propertie5];
