@@ -8,11 +8,13 @@
 
 #import "NSObject+APLisp.h"
 
-#define fun(name) extern Block MODULE_PREFIX##name;
+#define fun(name) extern Block name;
+
+#define Module APLispModule
 
 #define gdefun(name, block)                     \
-static Block name = ^{                          \
-    raiseUnloadedFuntionException(@"jeg");      \
+Block name = ^{                                 \
+    raiseUnloadedFuntionException(@ #name);     \
 };                                              \
                                                 \
 Block _##name() {                               \
@@ -20,13 +22,15 @@ Block _##name() {                               \
     return name;                                \
 }                                               \
                                                 \
-@implementation APLispModule(Function##name)    \
+@implementation Module(Function##name)          \
                                                 \
 - (void)_loadFunction##name {                   \
     _##name();                                  \
 }                                               \
                                                 \
 @end
+
+fun(foo)
 
 extern void raiseUnloadedFuntionException(NSString *functionName);
 

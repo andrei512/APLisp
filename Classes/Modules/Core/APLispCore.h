@@ -8,6 +8,11 @@
 
 #import "APLispModule.h"
 
+#undef Module
+#define Module APLispCore
+
+fun(range)
+
 @interface APLispCore : APLispModule
 
 @end

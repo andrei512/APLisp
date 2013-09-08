@@ -22,13 +22,33 @@ gdefun(foo, ^{
 
 @implementation APLispModule
 
++ (NSMutableDictionary *)modules {
+    static NSMutableDictionary *modules = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        modules = [NSMutableDictionary dictionary];
+    });
+    return modules;
+}
+
 + (instancetype)module {
-    return [self new];
+    NSString *className = NSStringFromClass([self class]);
+    NSMutableDictionary *modules = [self modules];
+    if (modules[className] == nil) {
+        modules[className] = [self new];
+    }
+    return modules[className];
+}
+
+- (id)init {
+    if (self = [super init]) {
+        [self setup];
+    }
+    return self;
 }
 
 - (void)setup {
     [self loadAllFunctions];
-    do(foo);
 }
 
 - (void)loadAllFunctions {
@@ -54,3 +74,4 @@ gdefun(foo, ^{
 
 
 @end
+
