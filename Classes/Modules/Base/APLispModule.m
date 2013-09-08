@@ -9,8 +9,15 @@
 #import "APLispModule.h"
 #import <objc/runtime.h>
 
+void raiseUnloadedFuntionException(NSString *functionName) {
+    [[NSException exceptionWithName:@"Use of uninitialized function"
+                             reason:[NSString stringWithFormat:@"Function %@ not loaded",
+                                     functionName]
+                           userInfo:nil] raise];
+}
+
 gdefun(foo, ^{
-    NSLog(@"foo");
+    NSLog(@"context = %@", conteXt);
 })
 
 @implementation APLispModule
@@ -20,7 +27,8 @@ gdefun(foo, ^{
 }
 
 - (void)setup {
-    [self loadAllFunctions];    
+    [self loadAllFunctions];
+    do(foo);
 }
 
 - (void)loadAllFunctions {
@@ -31,6 +39,7 @@ gdefun(foo, ^{
         NSString *methodName = NSStringFromSelector(name);
         if ([methodName hasPrefix:@"_loadFunction"]) {
             NSLog(@"%@", methodName);
+            [self performSelector:name];
         }
     }
 }

@@ -11,19 +11,24 @@
 #define fun(name) extern Block MODULE_PREFIX##name;
 
 #define gdefun(name, block)                     \
-static Block name = nil;                        \
+static Block name = ^{                          \
+    raiseUnloadedFuntionException(@"jeg");      \
+};                                              \
+                                                \
 Block _##name() {                               \
-    if (name == nil) {                          \
-        name = function(@"name", block);        \
-    }                                           \
+    name = function(@ #name, block);            \
     return name;                                \
 }                                               \
-@implementation APLispModule(name)              \
+                                                \
+@implementation APLispModule(Function##name)    \
+                                                \
 - (void)_loadFunction##name {                   \
     _##name();                                  \
 }                                               \
+                                                \
 @end
 
+extern void raiseUnloadedFuntionException(NSString *functionName);
 
 @interface APLispModule : NSObject
 
