@@ -8,6 +8,13 @@
 
 #import "NSObject+APLisp.h"
 #import <NSString+APUtils.h>
+#import <GRMustacheTemplate.h>
+
+NSString * contextString(NSString *format) {
+    return [GRMustacheTemplate renderObject:conteXt
+                                 fromString:format
+                                      error:NULL];
+}
 
 void addFunctionToContext(Block function, NSString *name, NSMutableDictionary *context) {
     context[name] = function;
@@ -15,7 +22,7 @@ void addFunctionToContext(Block function, NSString *name, NSMutableDictionary *c
 
 Block function(NSString *name, Block block) {
     return ^{
-        block_name = name;
+        function_name = name;
         
         block();
     };
@@ -199,7 +206,7 @@ Block _Nothing() {
             // param is this implicitly
             
             _Params = _params ?: @[this];
-            param = (_params != nil && _params.count > 0) ? _params[0] : nsnull;
+            _Param = (_params != nil && _params.count > 0) ? _params[0] : nsnull;
             
             // implicitly return this
             [NSObject _ret:this];

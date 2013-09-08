@@ -28,7 +28,8 @@ typedef NSObject *(^VaradicBlock)(NSArray *);
 #define this conteXt[@"this"]
 #define params ((NSArray *)conteXt[@"params"]) // this is not assignable
 #define _Params conteXt[@"params"]
-#define param conteXt[@"param"]
+#define param ((NSObject *)conteXt[@"param"]) // this is not assignable
+#define _Param conteXt[@"param"]
 
 #define resu1t conteXt[@"lastResult"]
 
@@ -46,11 +47,16 @@ typedef NSObject *(^VaradicBlock)(NSArray *);
 Block name = function(@#name, block);             \
 addFunctionToContext(name, @#name, conteXt);
 
-extern void addFunctionToContext(Block function, NSString *name, NSMutableDictionary *context);
-extern Block function(NSString *name, Block block);
-extern NSString * prettyClass(Class class);
 extern NSObject * _do(NSArray *args);
 extern NSObject * _yield(NSArray *args);
+
+extern void addFunctionToContext(Block function, NSString *name, NSMutableDictionary *context);
+extern Block function(NSString *name, Block block);
+
+extern NSString * contextString(NSString *format);
+
+extern NSString * prettyClass(Class class);
+
 extern BOOL isBlock(id object);
 extern Block _Nothing();
 
@@ -73,6 +79,7 @@ extern Block _Nothing();
 // Common
 #define asIndex int i = ((NSNumber *)param).intValue;
 
+#define asNumber asWithName(NSString, i)
 #define asString asWithName(NSString, string)
 #define asList asWithName(NSArray, list)
 #define asHash asWithName(NSDictionary, hash)
@@ -80,10 +87,9 @@ extern Block _Nothing();
 #define asView asWithName(UIView, view)
 #define asViewController asWithName(UIViewController, viewController)
 
-
 // Debuging
 
-#define block_name conteXt[@"name"]
+#define function_name conteXt[@"name"]
 
 // Array
 

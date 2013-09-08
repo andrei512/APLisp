@@ -8,21 +8,22 @@
 
 #import "NSObject+APLisp.h"
 
-#define module_function(module, function_name) [module lazyLoadFunction:@#function_name]
+#define fun(name) extern Block MODULE_PREFIX##name;
 
-#define MODULE_PREFIX Core
+#define gdefun(name, block)                     \
+static Block name = nil;                        \
+Block _##name() {                               \
+    if (name == nil) {                          \
+        name = function(@"name", block);        \
+    }                                           \
+    return name;                                \
+}                                               \
+@implementation APLispModule(name)              \
+- (void)_loadFunction##name {                   \
+    _##name();                                  \
+}                                               \
+@end
 
-#define funi(name) extern Block MODULE_PREFIX##name;
-#define gdefun(name, block)                             \
-static Block MODULE_PREFIX##name = nil;                 \
-Block _##MODULE_PREFIX##name() {                        \
-    if (MODULE_PREFIX##name == nil) {                   \
-        MODULE_PREFIX##name = function(@"name", block); \
-    }                                                   \
-    return MODULE_PREFIX##name;                         \
-}
-
-//funi(foo)
 
 @interface APLispModule : NSObject
 
