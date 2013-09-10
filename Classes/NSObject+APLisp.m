@@ -91,7 +91,13 @@ NSObject * _do(NSArray *args) {
 }
 
 NSObject * _yield(NSArray *args) {
-    return _do([@[Root, callback] arrayByAddingObjectsFromArray:args]);
+    id _this = nil;
+    if (args.count > 0) {
+        _this = args[0];
+    } else {
+        _this = Root;
+    }
+    return _do([@[_this, callback] arrayByAddingObjectsFromArray:args]);
 }
 
 Block _Nothing() {
@@ -189,7 +195,7 @@ Block _Nothing() {
         if (block != nil) {
             [self pushContext:context];
 
-            this = self;
+            _This = self;
             
             // Extract the callback from params
             if (_params.count > 0 &&
@@ -197,7 +203,7 @@ Block _Nothing() {
                 callback = [_params lastObject];
                 
                 NSRange range = {0, _params.count - 1};
-                _Params = [_params subarrayWithRange:range];
+                _params = [_params subarrayWithRange:range];
             } else {
                 callback = Nothing;
             }
@@ -270,6 +276,12 @@ Block _Nothing() {
         NSMutableDictionary *superContext = stack[level - 2];
         superContext[@"lastResult"] = a_result;
     }
+}
+
+- (ClassBlock)_is_a {
+    return ^(Class class) {
+        return [self isKindOfClass:class];
+    };
 }
 
 @end

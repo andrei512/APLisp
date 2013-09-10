@@ -10,6 +10,8 @@
 #define APLisp_h
 
 #import <APUtils.h>
+
 #import "NSObject+APLisp.h"
+#import "APLispCore.h"
 
 #endif

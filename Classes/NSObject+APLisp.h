@@ -12,6 +12,7 @@
 
 typedef void(^Block)(void);
 typedef NSObject *(^VaradicBlock)(NSArray *);
+typedef BOOL (^ClassBlock)(Class);
 
 // Modules
 
@@ -25,7 +26,8 @@ typedef NSObject *(^VaradicBlock)(NSArray *);
 
 #define Root [NSObject root]
 
-#define this conteXt[@"this"]
+#define this ((NSObject *)conteXt[@"this"])
+#define _This conteXt[@"this"]
 #define params ((NSArray *)conteXt[@"params"]) // this is not assignable
 #define _Params conteXt[@"params"]
 #define param ((NSObject *)conteXt[@"param"]) // this is not assignable
@@ -62,11 +64,13 @@ extern Block _Nothing();
 
 // Constants
 
-#define Nothing _Nothing();
+#define Nothing _Nothing()
 
 #define nsnull [NSNull null]
 
 // Helpers
+
+#define is_a(Class) _is_a([Class class])
 
 // Strong Types
 #define as(Class) asWithName(Class, object)
@@ -106,6 +110,7 @@ extern Block _Nothing();
 @interface NSObject (APLisp)
 
 @property (nonatomic, readonly) VaradicBlock _do;
+@property (nonatomic, readonly) ClassBlock _is_a;
 
 // this is used for calling block without and explicit object
 + (NSObject *)root;
@@ -139,5 +144,6 @@ extern Block _Nothing();
 
 - (void)performBlockWithParams:(NSArray *)_params
                          block:(Block)block;
+
 
 @end
